@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Brand palette — extracted from Tosa Home logo + flyer
+     Page theme is locked to LIGHT (cream-first). One dark moment per page max. */
+  --color-cream: #F0EAE0;
+  --color-cream-warm: #F5F0E5;
+  --color-paper: #FBFAF7;
+
+  --color-ink: #2E1F12;
+  --color-ink-soft: #5C4A38;
+  --color-ink-muted: #8A7560;
+
+  --color-tan: #BC9764;
+  --color-tan-dark: #A07F4F;
+
+  --color-line: #E4DCCC;
+
+  /* Fonts (registered by next/font in layout.tsx) */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "ss01", "cv01", "cv02";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-tan);
+  color: var(--color-cream);
+}
+
+/* Display headings use Be Vietnam Pro */
+.font-display {
+  font-family: var(--font-display), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "ss01";
+}
+
+/* Hairline divider helper */
+.hairline {
+  height: 1px;
+  background: var(--color-line);
 }

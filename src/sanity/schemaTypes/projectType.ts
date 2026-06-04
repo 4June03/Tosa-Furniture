@@ -22,18 +22,26 @@ export const projectType = defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Loại không gian',
+      title: 'Loại công trình',
       type: 'string',
       options: {
         list: [
-          { title: 'Phòng khách', value: 'living-room' },
-          { title: 'Phòng ngủ', value: 'bedroom' },
-          { title: 'Phòng bếp', value: 'kitchen' },
-          { title: 'Phòng tắm', value: 'bathroom' },
-          { title: 'Văn phòng', value: 'office' },
-          { title: 'Toàn nhà', value: 'full-house' },
+          { title: 'Biệt thự', value: 'biet-thu' },
+          { title: 'Nhà phố', value: 'nha-pho' },
+          { title: 'Chung cư', value: 'chung-cu' },
+          { title: 'Văn phòng', value: 'van-phong' },
+          { title: 'Showroom / Cửa hàng', value: 'showroom' },
+          { title: 'Khác', value: 'khac' },
         ],
       },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'area',
+      title: 'Diện tích (m²)',
+      type: 'number',
+      description: 'Hiển thị trên card dự án',
+      validation: (rule) => rule.positive(),
     }),
     defineField({
       name: 'location',

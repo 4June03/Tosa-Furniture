@@ -6,8 +6,8 @@ import { apiVersion, dataset, projectId } from './src/sanity/env'
 import { schemaTypes } from './src/sanity/schemaTypes'
 
 export default defineConfig({
-  name: 'tosa-furniture',
-  title: 'Tosa Furniture',
+  name: 'tosa-home',
+  title: 'Tosa Home',
   basePath: '/studio',
   projectId,
   dataset,
@@ -19,14 +19,28 @@ export default defineConfig({
           .title('Nội dung')
           .items([
             S.listItem()
-              .title('Cài đặt')
-              .id('settings')
+              .title('Trang chủ')
+              .id('homePage')
               .child(
-                S.document().schemaType('settings').documentId('settings')
+                S.document().schemaType('homePage').documentId('homePage')
+              ),
+            S.listItem()
+              .title('Giới thiệu')
+              .id('aboutPage')
+              .child(
+                S.document().schemaType('aboutPage').documentId('aboutPage')
               ),
             S.divider(),
             S.documentTypeListItem('service').title('Dịch vụ'),
             S.documentTypeListItem('project').title('Dự án'),
+            S.documentTypeListItem('post').title('Tin tức'),
+            S.divider(),
+            S.listItem()
+              .title('Cài đặt website')
+              .id('settings')
+              .child(
+                S.document().schemaType('settings').documentId('settings')
+              ),
           ]),
     }),
     visionTool({ defaultApiVersion: apiVersion }),
