@@ -1,29 +1,29 @@
-import { Container } from '../ui/Container'
+import { Container } from "../ui/Container";
 
-type Highlight = { key?: string; value: string; label: string }
+type Highlight = { key?: string; value: string; label: string };
 
 const FALLBACK_HIGHLIGHTS: Highlight[] = [
-  { value: '12+', label: 'Năm kinh nghiệm' },
-  { value: '200+', label: 'Dự án hoàn thành' },
-  { value: '180+', label: 'Khách hàng tin tưởng' },
-  { value: '1', label: 'Showroom tại Hà Nội' },
-]
+  { value: "12+", label: "Năm kinh nghiệm" },
+  { value: "200+", label: "Dự án hoàn thành" },
+  { value: "180+", label: "Khách hàng tin tưởng" },
+  { value: "1", label: "Showroom tại Hà Nội" },
+];
 
 export function TrustBand({
   highlights,
   foundedYear,
 }: {
-  highlights?: Highlight[] | null
-  foundedYear?: number | null
+  highlights?: Highlight[] | null;
+  foundedYear?: number | null;
 }) {
-  let items = highlights?.length ? highlights : FALLBACK_HIGHLIGHTS
+  let items = highlights?.length ? highlights : FALLBACK_HIGHLIGHTS;
 
   if (foundedYear && !highlights?.length) {
-    const years = new Date().getFullYear() - foundedYear
+    const years = new Date().getFullYear() - foundedYear;
     items = [
-      { value: `${years}+`, label: 'Năm kinh nghiệm' },
+      { value: `${years}+`, label: "Năm kinh nghiệm" },
       ...FALLBACK_HIGHLIGHTS.slice(1),
-    ]
+    ];
   }
 
   return (
@@ -46,5 +46,5 @@ export function TrustBand({
         </ul>
       </Container>
     </section>
-  )
+  );
 }
