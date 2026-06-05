@@ -33,6 +33,62 @@ function formatBody(data: ContactInput) {
   return lines.join('\n')
 }
 
+// Ghi lead vào Google Sheet qua Apps Script Web App (webhook).
+async function deliverToSheet(url: string, data: ContactInput): Promise<boolean> {
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.name,
+        phone: data.phone,
+        email: data.email ?? '',
+        service: labelOf(SERVICE_OPTIONS, data.service),
+        projectType: labelOf(PROJECT_TYPE_OPTIONS, data.projectType),
+        area: data.area ?? '',
+        message: data.message ?? '',
+      }),
+      // Apps Script trả 302 redirect sang googleusercontent.com — fetch tự follow.
+      redirect: 'follow',
+    })
+    if (!res.ok) {
+      console.error('[contact] Google Sheet webhook lỗi HTTP:', res.status)
+      return false
+    }
+    return true
+  } catch (err) {
+    console.error('[contact] Google Sheet webhook thất bại:', err)
+    return false
+  }
+}
+
+// Gửi email qua Resend (kênh phụ, chỉ chạy khi đã cấu hình env).
+async function deliverEmail(data: ContactInput, body: string): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY
+  const from = process.env.RESEND_FROM_EMAIL
+  const to = process.env.CONTACT_TO_EMAIL
+  if (!apiKey || !from || !to) return false
+
+  try {
+    const resend = new Resend(apiKey)
+    const result = await resend.emails.send({
+      from,
+      to,
+      replyTo: data.email || undefined,
+      subject: `Yêu cầu tư vấn từ ${data.name}`,
+      text: body,
+    })
+    if (result.error) {
+      console.error('[contact] Resend error:', result.error)
+      return false
+    }
+    return true
+  } catch (err) {
+    console.error('[contact] Resend unexpected:', err)
+    return false
+  }
+}
+
 export async function submitContact(input: unknown): Promise<ContactResult> {
   const parsed = contactSchema.safeParse(input)
   if (!parsed.success) {
@@ -46,33 +102,28 @@ export async function submitContact(input: unknown): Promise<ContactResult> {
   const data = parsed.data
   const body = formatBody(data)
 
-  const apiKey = process.env.RESEND_API_KEY
-  const from = process.env.RESEND_FROM_EMAIL
-  const to = process.env.CONTACT_TO_EMAIL
+  const sheetUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL
+  const emailConfigured =
+    process.env.RESEND_API_KEY &&
+    process.env.RESEND_FROM_EMAIL &&
+    process.env.CONTACT_TO_EMAIL
 
-  if (!apiKey || !from || !to) {
-    // Env not configured — log so user can verify the action flow.
-    console.info('[contact] Resend env vars missing. Submission logged only:')
+  // Chưa cấu hình kênh nào — chỉ log để kiểm tra luồng.
+  if (!sheetUrl && !emailConfigured) {
+    console.info('[contact] Chưa cấu hình kênh gửi (Google Sheet/email). Chỉ ghi log:')
     console.info(body)
     return { ok: true }
   }
 
-  try {
-    const resend = new Resend(apiKey)
-    const result = await resend.emails.send({
-      from,
-      to,
-      replyTo: data.email || undefined,
-      subject: `Yêu cầu tư vấn từ ${data.name}`,
-      text: body,
-    })
-    if (result.error) {
-      console.error('[contact] Resend error:', result.error)
-      return { ok: false, error: 'Không gửi được email. Vui lòng thử lại.' }
-    }
+  const deliveries = await Promise.all([
+    sheetUrl ? deliverToSheet(sheetUrl, data) : Promise.resolve(false),
+    emailConfigured ? deliverEmail(data, body) : Promise.resolve(false),
+  ])
+
+  // Thành công nếu ít nhất một kênh nhận được dữ liệu.
+  if (deliveries.some(Boolean)) {
     return { ok: true }
-  } catch (err) {
-    console.error('[contact] unexpected:', err)
-    return { ok: false, error: 'Có lỗi xảy ra. Vui lòng thử lại.' }
   }
+
+  return { ok: false, error: 'Không gửi được thông tin. Vui lòng thử lại.' }
 }

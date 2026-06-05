@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Be_Vietnam_Pro, Plus_Jakarta_Sans } from 'next/font/google'
 import { sanityFetch } from '@/sanity/lib/fetch'
 import { SETTINGS_QUERY } from '@/sanity/lib/queries'
+import { LeadPopup } from '@/components/LeadPopup'
 import './globals.css'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://tosa.home.vn'
@@ -95,6 +96,7 @@ export default async function RootLayout({
           }}
         />
         {children}
+        <LeadPopup />
       </body>
     </html>
   )
