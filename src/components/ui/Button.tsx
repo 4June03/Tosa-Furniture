@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
-type Variant = 'primary' | 'ghost' | 'inverse'
+type Variant = 'primary' | 'ghost' | 'inverse' | 'outline-light'
 type Size = 'md' | 'lg'
 
 const base =
@@ -13,6 +13,7 @@ const variants: Record<Variant, string> = {
   primary: 'bg-ink text-cream hover:bg-tan hover:text-ink',
   ghost: 'border border-ink text-ink hover:bg-ink hover:text-cream',
   inverse: 'bg-cream text-ink hover:bg-tan hover:text-cream',
+  'outline-light': 'border border-cream/60 text-cream hover:bg-cream hover:text-ink',
 }
 
 const sizes: Record<Size, string> = {

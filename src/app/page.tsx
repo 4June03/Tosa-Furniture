@@ -1,19 +1,16 @@
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { Hero } from '@/components/sections/Hero'
-import { TrustBand } from '@/components/sections/TrustBand'
 import { FeaturedProjects } from '@/components/sections/FeaturedProjects'
 import { ServicesList } from '@/components/sections/ServicesList'
 import { Process } from '@/components/sections/Process'
 import { AboutSnippet } from '@/components/sections/AboutSnippet'
-import { LatestPosts } from '@/components/sections/LatestPosts'
 import { ContactCta } from '@/components/sections/ContactCta'
 import { sanityFetch } from '@/sanity/lib/fetch'
 import {
   SETTINGS_QUERY,
   HOME_PAGE_QUERY,
   ABOUT_HIGHLIGHTS_QUERY,
-  LATEST_POSTS_QUERY,
 } from '@/sanity/lib/queries'
 
 type SettingsData = {
@@ -30,6 +27,7 @@ type SettingsData = {
     email?: string | null
     zalo?: string | null
   } | null
+  socialLinks?: Array<{ platform?: string | null; url?: string | null }> | null
 }
 
 type HomeData = {
@@ -72,51 +70,35 @@ type AboutData = {
   highlights?: Array<{ key?: string; value: string; label: string }> | null
 }
 
-type PostData = {
-  _id: string
-  title: string
-  slug: string
-  excerpt?: string | null
-  category?: string | null
-  publishedAt?: string | null
-  coverImage?: {
-    asset?: { url?: string; metadata?: { lqip?: string } } | null
-    alt?: string | null
-  } | null
-}
-
 export default async function HomePage() {
-  const [settings, home, about, posts] = await Promise.all([
+  const [settings, home, about] = await Promise.all([
     sanityFetch<SettingsData>(SETTINGS_QUERY),
     sanityFetch<HomeData>(HOME_PAGE_QUERY),
     sanityFetch<AboutData>(ABOUT_HIGHLIGHTS_QUERY),
-    sanityFetch<PostData[]>(LATEST_POSTS_QUERY),
   ])
 
   return (
     <>
-      <Nav siteName={settings?.siteName ?? 'Tosa Home'} />
+      <Nav siteName={settings?.siteName ?? 'Tosa Interior'} />
       <main className="flex-1">
         <Hero slide={home?.heroSlides?.[0]} />
-        <TrustBand
-          highlights={about?.highlights}
-          foundedYear={about?.foundedYear}
-        />
         <FeaturedProjects projects={home?.featuredProjects} />
         <ServicesList services={home?.featuredServices} />
         <Process />
         <AboutSnippet
           heroHeading={about?.heroHeading}
           heroSubheading={about?.heroSubheading}
+          highlights={about?.highlights}
+          foundedYear={about?.foundedYear}
         />
-        <LatestPosts posts={posts} />
         <ContactCta contact={settings?.contact} showroom={settings?.showroom} />
       </main>
       <Footer
-        siteName={settings?.siteName ?? 'Tosa Home'}
+        siteName={settings?.siteName ?? 'Tosa Interior'}
         tagline={settings?.tagline}
         contact={settings?.contact}
         showroom={settings?.showroom}
+        socialLinks={settings?.socialLinks}
       />
     </>
   )

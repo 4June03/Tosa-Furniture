@@ -11,8 +11,8 @@ import { submitContact } from '@/lib/contact-action'
 
 const STORAGE_KEY = 'tosa-lead-popup-seen'
 const DELAY_MS = 10_000
-const POPUP_IMAGE = 'https://picsum.photos/seed/tosa-home-popup/900/1200'
-const POPUP_IMAGE_ALT = 'Không gian nội thất Tosa Home'
+const POPUP_IMAGE = '/images/popup.png'
+const POPUP_IMAGE_ALT = 'Không gian nội thất Tosa'
 
 const leadSchema = contactSchema.pick({ name: true, phone: true, service: true })
 type LeadInput = Pick<ContactInput, 'name' | 'phone' | 'service'>
@@ -137,7 +137,7 @@ export function LeadPopup() {
           visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
         }`}
       >
-        {/* Left: invitation-style image */}
+        {/* Left: image */}
         <div className="relative hidden w-2/5 shrink-0 bg-line md:block">
           <Image
             src={POPUP_IMAGE}
@@ -146,17 +146,6 @@ export function LeadPopup() {
             sizes="40vw"
             className="object-cover"
           />
-          {/* Wedding-card inset frame */}
-          <div className="pointer-events-none absolute inset-4 border border-cream/60" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 p-6">
-            <p className="font-display text-lg font-semibold leading-snug text-cream">
-              Tosa Home
-            </p>
-            <p className="mt-1 text-xs uppercase tracking-[0.2em] text-cream/80">
-              Thiết kế &amp; thi công nội thất
-            </p>
-          </div>
         </div>
 
         {/* Right: form */}

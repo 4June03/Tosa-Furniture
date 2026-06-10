@@ -1,24 +1,21 @@
 import Link from 'next/link'
 import { Container } from './ui/Container'
 import { Button } from './ui/Button'
+import { Logo } from './ui/Logo'
 
 const NAV_ITEMS = [
   { href: '/gioi-thieu', label: 'Giới thiệu' },
   { href: '/dich-vu', label: 'Dịch vụ' },
   { href: '/du-an', label: 'Dự án' },
-  { href: '/tin-tuc', label: 'Tin tức' },
   { href: '/lien-he', label: 'Liên hệ' },
 ]
 
-export function Nav({ siteName = 'Tosa Home' }: { siteName?: string }) {
+export function Nav({ siteName = 'Tosa Interior' }: { siteName?: string }) {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur supports-[backdrop-filter]:bg-cream/75">
       <Container className="flex h-16 items-center justify-between md:h-[72px]">
-        <Link
-          href="/"
-          className="font-display text-xl font-bold tracking-tight text-ink md:text-2xl"
-        >
-          {siteName}
+        <Link href="/" aria-label={siteName} className="flex items-center">
+          <Logo alt={siteName} className="h-11 w-auto rounded-xl md:h-14" />
         </Link>
 
         <nav aria-label="Chính" className="hidden items-center gap-8 lg:flex">

@@ -1,58 +1,35 @@
+import Image from 'next/image'
 import { Container } from '../ui/Container'
 
-const STEPS = [
-  {
-    title: 'Khảo sát & lên ý tưởng',
-    body:
-      'Gặp gỡ, đo đạc công trình, lắng nghe nhu cầu sống và phong cách của gia chủ.',
-  },
-  {
-    title: 'Thiết kế chi tiết',
-    body:
-      'Phối cảnh 3D, bản vẽ kỹ thuật, dự toán vật tư minh bạch, chốt trước khi thi công.',
-  },
-  {
-    title: 'Thi công tại xưởng & công trường',
-    body:
-      'Sản xuất nội thất tại xưởng riêng, đồng bộ thi công tại công trình theo tiến độ.',
-  },
-  {
-    title: 'Bàn giao & bảo hành',
-    body:
-      'Nghiệm thu cùng gia chủ, hướng dẫn sử dụng, bảo hành dài hạn theo từng hạng mục.',
-  },
-]
+// Ảnh infographic quy trình — đặt tại public/images/process.png
+const PROCESS_IMAGE = '/images/process.png'
 
 export function Process() {
   return (
-    <section className="border-t border-line bg-cream py-20 md:py-28">
+    <section className="border-t border-line bg-cream-warm py-20 md:py-28">
       <Container>
-        <div className="max-w-2xl">
-          <h2 className="font-display text-3xl font-bold leading-tight tracking-tight text-ink md:text-5xl">
-            Một quy trình, bốn nhịp rõ ràng
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="text-xs uppercase tracking-[0.18em] text-tan">
+            Quy trình
+          </div>
+          <h2 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-ink md:text-5xl">
+            Một quy trình, năm bước rõ ràng
           </h2>
           <p className="mt-5 text-base leading-relaxed text-ink-soft md:text-lg">
-            Tosa Home kiểm soát công trình theo bốn bước. Mỗi bước có nghiệm thu
-            cùng gia chủ trước khi chuyển sang bước tiếp theo.
+            Tosa kiểm soát công trình theo từng bước, nghiệm thu cùng gia chủ
+            trước khi chuyển sang bước tiếp theo.
           </p>
         </div>
 
-        <ol className="mt-14 grid gap-x-8 gap-y-10 md:mt-20 md:grid-cols-4">
-          {STEPS.map((step, i) => (
-            <li key={step.title} className="relative">
-              <div className="font-display text-5xl font-bold leading-none text-tan md:text-6xl">
-                {String(i + 1).padStart(2, '0')}
-              </div>
-              <div className="mt-5 h-px w-12 bg-ink" aria-hidden />
-              <h3 className="mt-5 font-display text-lg font-semibold tracking-tight text-ink md:text-xl">
-                {step.title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-                {step.body}
-              </p>
-            </li>
-          ))}
-        </ol>
+        <div className="relative mx-auto mt-12 aspect-[1568/744] w-full max-w-5xl overflow-hidden md:mt-16">
+          <Image
+            src={PROCESS_IMAGE}
+            alt="Quy trình làm việc tại Tosa gồm 5 bước: gặp gỡ và khảo sát, thiết kế 3D, báo giá và bản vẽ 2D, thi công sản xuất, nghiệm thu và bàn giao."
+            fill
+            sizes="(min-width: 1024px) 1024px, 100vw"
+            className="object-contain"
+          />
+        </div>
       </Container>
     </section>
   )
